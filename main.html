@@ -7,8 +7,6 @@
 <body>
 
   <button onclick="speech ()">Слушать</button>
-  <button onclick="talk ()">Проговорить</button>
-  <button onclick="stop ()">Остановить</button>
 
   <script>
   // Создаем распознаватель
@@ -35,16 +33,6 @@
     recognizer.start();
   }
 
-  var synth = window.speechSynthesis;
-  var utterance = new SpeechSynthesisUtterance('How about we say this now? This is quite a long sentence to say.');
-
-  function talk () {
-    synth.speak (utterance);
-  }
-
-  function stop () {
-    synth.pause();
-  }
   </script>
 
 </body>
