@@ -28,6 +28,7 @@ function showProjects1() {
       transform: translate(-50%, -50%);
       z-index: 10;
       width: 150px;
+      border-radius: 50px;
     `;
 
     document.body.appendChild(message);
@@ -80,6 +81,7 @@ function showProjects2() {
       transform: translate(-50%, -50%);
       z-index: 10;
       width: 150px;
+      border-radius: 50px;
     `;
 
     document.body.appendChild(message);
@@ -138,6 +140,7 @@ function showProjects3() {
       transform: translate(-50%, -50%);
       z-index: 10;
       width: 150px;
+      border-radius: 50px;
     `;
 
     document.body.appendChild(message);
@@ -190,6 +193,7 @@ function showProjects4() {
       transform: translate(-50%, -50%);
       z-index: 10;
       width: 150px;
+      border-radius: 50px;
     `;
 
     document.body.appendChild(message);
