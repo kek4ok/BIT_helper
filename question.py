@@ -15,11 +15,11 @@ def check_keywords(question: str):
             if res:
                 print(f'Совпадения из списка найдены в вопросе `{text}`: `{db_question}`')
                 return db_question
-            else:
-                return 'NO ANSWER TO THIS QUESTION'
+
 
 
 def answer_to_question(user_question='Привет как какать?'):
     question = check_keywords(user_question)
+    print(question)
     answer = get_answer(question)
     return answer

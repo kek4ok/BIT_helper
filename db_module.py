@@ -12,7 +12,7 @@ def get_keywords():
 
 
 def get_answer(question):
-    if question == 'NO ANSWER TO THIS QUESTION':
+    if question is None:
         return 'NO ANSWER TO THIS QUESTION'
     else:
         conn = sqlite3.connect("bot/questions.db")
@@ -22,5 +22,3 @@ def get_answer(question):
         conn.close()
 
     return result[0]
-
-
