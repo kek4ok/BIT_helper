@@ -213,4 +213,17 @@ function showProjects4() {
 };
 
 // вызываем функцию
-showProjects1();
+
+
+const nav = document.querySelector('div[class="user-card_header_2ZTRL"]');
+
+let btn = document.createElement('BUTTON');
+
+btn.innerHTML = 'ОБУЧЕНИЕ';
+
+btn.addEventListener('click', () => {
+    showProjects1();
+});
+btn.classList.add('base-button', 'base-button--primary', 'base-button--flat', 'projects-select_add_1cLJs');
+
+nav.appendChild(btn);
