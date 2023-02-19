@@ -30,27 +30,6 @@ function action_trigger() {
     xhr.onload = function() {
         setBotResponse(JSON.parse(xhr.response));
     };
-    /*$.ajax({
-        url: `http://localhost:5005/conversations/${user_id}/execute`,
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({ "name": action_name, "policy": "MappingPolicy", "confidence": "0.98" }),
-        success: function(botResponse, status) {
-            console.log("Response from Rasa: ", botResponse, "\nStatus: ", status);
-
-            if (botResponse.hasOwnProperty("messages")) {
-                setBotResponse(botResponse.messages);
-            }
-            $("#userInput").prop('disabled', false);
-        },
-        error: function(xhr, textStatus, errorThrown) {
-
-            // if there is no response from rasa server
-            setBotResponse("");
-            console.log("Error from bot end: ", textStatus);
-            $("#userInput").prop('disabled', false);
-        }
-    });*/
 }
 
 
@@ -130,29 +109,7 @@ function send(message) {
     xhr.onload = function() {
         setBotResponse(JSON.parse(xhr.response));
     };
-    /*$.ajax({
-        url: "http://127.0.0.1:8000/questions_send",
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({ question: message, user_id: user_id, question_id: 1 }),
-        success: function(botResponse, status) {
-            console.log("Response from Rasa: ", botResponse, "\nStatus: ", status);
 
-            // if user wants to restart the chat, clear the existing chat contents
-            if (message.toLowerCase() == '/restart') {
-                $(".chats").html("");
-                return;
-            }
-            setBotResponse(botResponse);
-
-        },
-        error: function(xhr, textStatus, errorThrown) {
-
-            // if there is no response from rasa server
-            setBotResponse("");
-            console.log("Error from bot end: ", textStatus);
-        }
-    });*/
 }
 
 //=================== set bot response in the chats ===========================================
@@ -179,6 +136,22 @@ function setBotResponse(response) {
             scrollToBottomOfResults();
 
         }
+    }, 300);
+};
+
+function setBotResponse_mic(response) {
+    //display bot response after 500 milliseconds
+    setTimeout(function() {
+        hideBotTyping();
+
+
+        //check if the response contains "text"
+
+        var BotResponse = '<img class="botAvatar" src="https://raw.githubusercontent.com/kek4ok/BIT_helper/main/img/avatar1.png"/><p class="botMsg">' + response + '</p><div class="clearfix"></div>';
+        $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+
+
+        scrollToBottomOfResults();
     }, 300);
 }
 
@@ -393,4 +366,63 @@ function showBotTyping() {
 function hideBotTyping() {
     $('#botAvatar').remove();
     $('.botTyping').remove();
+}
+
+
+
+// Создаем распознаватель
+var recognizer = new webkitSpeechRecognition();
+
+// Ставим опцию, чтобы распознавание началось ещё до того, как пользователь закончит говорить
+recognizer.interimResults = true;
+
+// Какой язык будем распознавать?
+recognizer.lang = 'ru-Ru';
+var question;
+var answer;
+// Используем колбек для обработки результатов
+recognizer.onresult = function(event) {
+    var result = event.results[event.resultIndex];
+    if (result.isFinal) {
+        question = result[0].transcript;
+        setUserResponse(question);
+        sendQuestion();
+
+    }
+};
+
+function speech() {
+    // Начинаем слушать микрофон и распознавать голос
+    recognizer.start();
+}
+
+function sendQuestion() {
+    item = {
+        question: question,
+        user_id: 312312,
+        question_id: 1
+    };
+    let xhr = new XMLHttpRequest();
+
+    xhr.open("POST", "http://127.0.0.1:8000/questions_send", true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(item));
+
+    xhr.onload = function() {
+        answer = JSON.parse(xhr.response).data[0].text;
+        setBotResponse_mic(answer);
+    };
+    setTimeout(function() {
+        speakText();
+    }, 300);
+}
+
+function speakText() {
+    // остановим все, что уже синтезируется в речь
+    window.speechSynthesis.cancel();
+
+    // прочитать текст
+    const text = answer;
+    const utterance = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(utterance);
 }

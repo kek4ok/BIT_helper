@@ -139,7 +139,7 @@ textarea-webkit-scrollbar {
 
 .usrInput {
     padding: 0.5em;
-    width: 80%;
+    width: 60%;
     margin-left: 4%;
     border: 0;
     padding-left: 15px;
@@ -168,7 +168,21 @@ textarea-webkit-scrollbar {
     padding: 5px;
     font-size: 20px;
     cursor: pointer;
-    color: #d8d5d2
+    color: #faa419
+}
+
+#sendButton_mic {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 5px;
+    text-align: center;
+    padding: 5px;
+    font-size: 25px;
+    cursor: pointer;
+    color: #faa419;
+    float: left;
 }
 
 .imgProfile {
