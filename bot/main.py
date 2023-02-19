@@ -110,7 +110,7 @@ async def create_user_profile(id: int) -> None:
 
 
 async def add_new_question(question: str, answer: str, category: str, key_words: str) -> None:
-    conn = sqlite3.connect("questions.db")
+    conn = sqlite3.connect("../Chatbot-Widget-master/bot/questions.db")
     cursor = conn.cursor()
     cursor.execute('INSERT INTO Questions (question, answer, category, key_words) VALUES (?, ?, ?, ?)', [question, answer, category, key_words])
     conn.commit()
