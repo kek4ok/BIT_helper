@@ -4,7 +4,7 @@ import sqlite3
 def get_keywords():
     conn = sqlite3.connect("bot/questions.db")
     cursor = conn.cursor()
-    cursor.execute('SELECT question, key_words FROM Questions')
+    cursor.execute('SELECT question, count FROM Questions')
     result = cursor.fetchall()
     conn.close()
 
@@ -22,3 +22,4 @@ def get_answer(question):
         conn.close()
 
     return result[0]
+

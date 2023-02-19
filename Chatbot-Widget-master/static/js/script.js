@@ -23,7 +23,7 @@ function action_trigger() {
     // send an event to the bot, so that bot can start the conversation by greeting the user
     let xhr = new XMLHttpRequest();
 
-    xhr.open("get", "http://127.0.0.1:8000/questions_send_start", true);
+    xhr.open("get", "http://45.95.202.88:8000/questions_send_start", true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send();
 
@@ -102,7 +102,7 @@ function send(message) {
     };
     let xhr = new XMLHttpRequest();
 
-    xhr.open("POST", "http://127.0.0.1:8000/questions_send", true);
+    xhr.open("POST", "http://45.95.202.88:8000/questions_send", true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(item));
 
@@ -404,7 +404,7 @@ function sendQuestion() {
     };
     let xhr = new XMLHttpRequest();
 
-    xhr.open("POST", "http://127.0.0.1:8000/questions_send", true);
+    xhr.open("POST", "http://45.95.202.88:8000/questions_send", true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(item));
 
