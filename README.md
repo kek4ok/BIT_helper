@@ -45,7 +45,7 @@
 git clone https://github.com/kek4ok/BIT_helper
 cd BIT_helper
 pip3 install -r requirements.txt
-cp -R /html /var/www/
+cp -R html /var/www/
 ~~~
 
 ### База данных
