@@ -77,9 +77,9 @@ async def process_answer(message: types.Message, state: FSMContext):
     await message.reply('🤖 Выбери категорию из предложенных на клавиатуре', reply_markup=markup)
 
 
-#@dp.message_handler(lambda message: message.text not in ['Технический', 'Финансовый', 'Форма', 'Другое'], state=Form.answer)
-#async def process_category_invalid(message: types.Message):
-    #return await message.reply('🤖 Не знаю такую категорию, выбери из предложенных')
+@dp.message_handler(lambda message: message.text not in ['Технический', 'Финансовый', 'Форма', 'Другое'], state=Form.category)
+async def process_category_invalid(message: types.Message):
+    return await message.reply('🤖 Не знаю такую категорию, выбери из предложенных')
 
 
 @dp.message_handler(state=Form.category)
@@ -87,6 +87,7 @@ async def process_category(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['category'] = message.text
         markup = types.ReplyKeyboardRemove()
+        await Form.next()
         await message.answer(text='🤖 Отправь ключевые слова через запятую, которые относятся к добавленному вопросу:', reply_markup=markup)
 
 
@@ -112,7 +113,7 @@ async def create_user_profile(id: int) -> None:
 async def add_new_question(question: str, answer: str, category: str, key_words: str) -> None:
     conn = sqlite3.connect("questions.db")
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO Questions (question, answer, category, key_words) VALUES (?, ?, ?, ?)', [question, answer, category, key_words])
+    cursor.execute('INSERT INTO Questions (question, answer, category, count, key_words, status) VALUES (?, ?, ?, ?, ?, ?)', [question, answer, category, key_words, 1, 0])
     conn.commit()
     conn.close()
 
