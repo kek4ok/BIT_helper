@@ -1,26 +1,22 @@
-// ========================== greet user proactively ========================
+// ========================== пользователь ========================
 $(document).ready(function() {
 
-    // showBotTyping();
-    // $("#userInput").prop('disabled', true);
-    //global variables
     action_name = "action_greet_user";
     user_id = "jitesh97";
 
-    //if you want the bot to start the conversation
     action_trigger();
 
 })
 
-// ========================== restart conversation ========================
+// ========================== перезапустить разговор ========================
 function restartConversation() {
     $(".usrInput").val("");
     send("/restart");
 }
 
-// ========================== let the bot start the conversation ========================
+// ========================== бот начинает разговор ========================
 function action_trigger() {
-    // send an event to the bot, so that bot can start the conversation by greeting the user
+
     let xhr = new XMLHttpRequest();
 
     xhr.open("get", "http://45.95.202.88:8000/questions_send_start", true);
@@ -33,7 +29,7 @@ function action_trigger() {
 }
 
 
-//=====================================	user enter or sends the message =====================
+//=====================================	пользователь вводит или отправляет сообщение =====================
 $(".usrInput").on("keyup keypress", function(e) {
     var keyCode = e.keyCode || e.which;
 
@@ -74,7 +70,7 @@ $("#sendButton").on("click", function(e) {
 })
 
 
-//==================================== Set user response =====================================
+//==================================== показать ответ пользователя =====================================
 function setUserResponse(message) {
     var UserResponse = '<img class="userAvatar" src=' + "./static/img/userAvatar.png" + '><p class="userMsg">' + message + ' </p><div class="clearfix"></div>';
     $(UserResponse).appendTo(".chats").show("slow");
@@ -85,14 +81,14 @@ function setUserResponse(message) {
     $(".suggestions").remove();
 }
 
-//=========== Scroll to the bottom of the chats after new message has been added to chat ======
+//=========== Прокрутите вниз чаты после добавления нового сообщения в чат ======
 function scrollToBottomOfResults() {
 
     var terminalResultsDiv = document.getElementById("chats");
     terminalResultsDiv.scrollTop = terminalResultsDiv.scrollHeight;
 }
 
-//============== send user message to rasa server =============================================
+//============== отправить сообщение пользователя на сервер =============================================
 function send(message) {
 
     item = {
@@ -112,23 +108,20 @@ function send(message) {
 
 }
 
-//=================== set bot response in the chats ===========================================
+//=================== установить ответ бота в чатах ===========================================
 function setBotResponse(response) {
     response = response.data
-        //display bot response after 500 milliseconds
+
     setTimeout(function() {
         hideBotTyping();
 
-        //if we get response from Rasa
         for (i = 0; i < response.length; i++) {
 
-            //check if the response contains "text"
             if (response[i].hasOwnProperty("text")) {
                 var BotResponse = '<img class="botAvatar" src="https://raw.githubusercontent.com/kek4ok/BIT_helper/main/img/avatar1.png"/><p class="botMsg">' + response[i].text + '</p><div class="clearfix"></div>';
                 $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
             }
 
-            //check if the response contains "buttons" 
             if (response[i].hasOwnProperty("buttons")) {
                 addSuggestion(response[i].buttons);
             }
@@ -140,28 +133,23 @@ function setBotResponse(response) {
 };
 
 function setBotResponse_mic(response) {
-    //display bot response after 500 milliseconds
     setTimeout(function() {
         hideBotTyping();
 
-
-        //check if the response contains "text"
-
         var BotResponse = '<img class="botAvatar" src="https://raw.githubusercontent.com/kek4ok/BIT_helper/main/img/avatar1.png"/><p class="botMsg">' + response + '</p><div class="clearfix"></div>';
         $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
-
 
         scrollToBottomOfResults();
     }, 300);
 }
 
-//====================================== Toggle chatbot =======================================
+//====================================== Переключить чат-бот =======================================
 $("#profile_div").click(function() {
     $(".profile_div").toggle();
     $(".widget").toggle();
 });
 
-//====================================== Suggestions ===========================================
+//====================================== Предложения о посещения вкладок ===========================================
 
 function addSuggestion(textToAdd) {
     setTimeout(function() {
@@ -171,7 +159,6 @@ function addSuggestion(textToAdd) {
     }, 500);
 }
 
-// on click of suggestions, get the value and send to rasa
 $(document).on("click", ".menu .menuChips", function() {
     var text = this.innerText;
     var payload = this.getAttribute('data-payload');
@@ -179,7 +166,6 @@ $(document).on("click", ".menu .menuChips", function() {
     setUserResponse(text);
     send(payload);
 
-    //delete the suggestions
     $(".suggestions").remove();
 
 });
@@ -195,7 +181,7 @@ $("#restart").click(function() {
     restartConversation()
 });
 
-//====================================== Cards Carousel =========================================
+//====================================== анимация открытия =========================================
 
 function showCardsCarousel(cardsToAdd) {
     var cards = createCardsCarousel(cardsToAdd);
@@ -224,8 +210,8 @@ function showCardsCarousel(cardsToAdd) {
     card.querySelector(".arrow.prev").addEventListener("click", scrollToPrevPage);
 
 
-    // For paginated scrolling, simply scroll the card one item in the given
-    // direction and let css scroll snaping handle the specific alignment.
+    // Для постраничной прокрутки просто прокрутите карточку на один элемент в заданном
+    // направление и позволить привязке прокрутки css обрабатывать конкретное выравнивание.
     function scrollToNextPage() {
         card_scroller.scrollBy(card_item_size, 0);
     }
@@ -254,48 +240,7 @@ function createCardsCarousel(cardsData) {
     return cardContents;
 }
 
-//====================================== Quick Replies ==================================================
-
-function showQuickReplies(quickRepliesData) {
-    var chips = ""
-    for (i = 0; i < quickRepliesData.length; i++) {
-        var chip = '<div class="chip" data-payload=\'' + (quickRepliesData[i].payload) + '\'>' + quickRepliesData[i].title + '</div>'
-        chips += (chip)
-    }
-
-    var quickReplies = '<div class="quickReplies">' + chips + '</div><div class="clearfix"></div>'
-    $(quickReplies).appendTo(".chats").fadeIn(1000);
-    scrollToBottomOfResults();
-    const slider = document.querySelector('.quickReplies');
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-
-    slider.addEventListener('mousedown', (e) => {
-        isDown = true;
-        slider.classList.add('active');
-        startX = e.pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;
-    });
-    slider.addEventListener('mouseleave', () => {
-        isDown = false;
-        slider.classList.remove('active');
-    });
-    slider.addEventListener('mouseup', () => {
-        isDown = false;
-        slider.classList.remove('active');
-    });
-    slider.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - slider.offsetLeft;
-        const walk = (x - startX) * 3; //scroll-fast
-        slider.scrollLeft = scrollLeft - walk;
-    });
-
-}
-
-// on click of quickreplies, get the value and send to rasa
+// по щелчку быстрых ответов получаем значение и отправляем
 $(document).on("click", ".quickReplies .chip", function() {
     var text = this.innerText;
     var payload = this.getAttribute('data-payload');
@@ -308,53 +253,8 @@ $(document).on("click", ".quickReplies .chip", function() {
 
 });
 
-//====================================== Get User Location ==================================================
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(getUserPosition, handleLocationAccessError);
-    } else {
-        response = "Geolocation is not supported by this browser.";
-    }
-}
 
-function getUserPosition(position) {
-    response = "Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude;
-    console.log("location: ", response);
-
-    //here you add the intent which you want to trigger 
-    response = '/inform{"latitude":' + position.coords.latitude + ',"longitude":' + position.coords.longitude + '}';
-    $("#userInput").prop('disabled', false);
-    send(response);
-    showBotTyping();
-}
-
-function handleLocationAccessError(error) {
-
-    switch (error.code) {
-        case error.PERMISSION_DENIED:
-            console.log("User denied the request for Geolocation.")
-            break;
-        case error.POSITION_UNAVAILABLE:
-            console.log("Location information is unavailable.")
-            break;
-        case error.TIMEOUT:
-            console.log("The request to get user location timed out.")
-            break;
-        case error.UNKNOWN_ERROR:
-            console.log("An unknown error occurred.")
-            break;
-    }
-
-    response = '/inform{"user_location":"deny"}';
-    send(response);
-    showBotTyping();
-    $(".usrInput").val("");
-    $("#userInput").prop('disabled', false);
-
-
-}
-
-//======================================bot typing animation ======================================
+//======================================анимация набора текста ботом ======================================
 function showBotTyping() {
 
     var botTyping = '<img class="botAvatar" id="botAvatar" src="https://raw.githubusercontent.com/kek4ok/BIT_helper/main/img/avatar1.png"/><div class="botTyping">' + '<div class="bounce1"></div>' + '<div class="bounce2"></div>' + '<div class="bounce3"></div>' + '</div>'
