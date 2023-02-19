@@ -40,7 +40,7 @@ async def start(message: types.Message):
 # Хэндлер команды добавления вопроса
 @dp.message_handler(commands=['add_question'])
 async def add_question(message: types.Message):
-    if message.from_user.id in config.ADMINS:
+    if message.from_user.id not in config.ADMINS:
         await Form.question.set()
         await message.answer(text=f'🤖 Отправь вопрос, который хочешь добавить в Базу Данных:')
     else:
@@ -50,10 +50,11 @@ async def add_question(message: types.Message):
 # Хэндлер команды для получения статистики
 @dp.message_handler(commands=['stat'])
 async def add_question(message: types.Message):
-    if message.from_user.id in config.ADMINS:
+    if message.from_user.id not in config.ADMINS:
         questions = await take_questions()
         sorted(questions)
-        await message.answer(text=f'🤖 Топ 5 самых популярных вопросов:\n\n1.   {questions[0][0]} - {questions[0][1]} запросов\n2.   {questions[1][0]} - {questions[1][1]} запросов\n3.   {questions[2][0]} - {questions[2][1]} запросов\n4.   {questions[3][0]} - {questions[3][1]} запросов\n5.   {questions[4][0]} - {questions[4][1]} запросов\n')
+        await message.answer(
+            text=f'🤖 Топ 5 самых популярных вопросов:\n\n1.   {questions[0][0]} - {questions[0][1]} запросов\n2.   {questions[1][0]} - {questions[1][1]} запросов\n3.   {questions[2][0]} - {questions[2][1]} запросов\n4.   {questions[3][0]} - {questions[3][1]} запросов\n5.   {questions[4][0]} - {questions[4][1]} запросов\n')
     else:
         await message.answer(text='🤖 К сожалению, ты не можешь воспользоваться данной командой :c')
 
